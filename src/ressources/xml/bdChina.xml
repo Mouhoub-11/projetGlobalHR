@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entreprise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="validation.xsd" idEnt="VV" nomEnt="PetroChina" localisation="Chine">
+    <!-- Employes -->
+    <Employe idEmploye="A" idEnt="VV" idC="Aa">
+        <nomE>Dupont</nomE>
+        <prenomE>Jean</prenomE>
+        
+        <age>30</age>
+        <Telephone>+86123456789</Telephone>
+    </Employe>
+    <Employe idEmploye="B" idEnt="VV" idC="Bb" idB="Y">
+        <nomE>Martin</nomE>
+        <prenomE>Sophie</prenomE>
+        <age>28</age>
+        <Telephone>+86198765432</Telephone>
+    </Employe>
+    <Employe idEmploye="C" idEnt="VV" idC="Cb" >
+        <nomE>Lefevre</nomE>
+        <prenomE>Paul</prenomE>
+        
+        <age>35</age>
+        <Telephone>+86456789012</Telephone>
+    </Employe>
+    <Employe idEmploye="D" idEnt="VV">
+        <nomE>Dubois</nomE>
+        <prenomE>Marie</prenomE>
+       
+        <age>25</age>
+        <Telephone>+86678901234</Telephone>
+    </Employe>
+    <Employe idEmploye="E" idEnt="VV" idC="Es" idB="V">
+        <nomE>Leroux</nomE>
+        <prenomE>Pierre</prenomE>
+       
+        <age>32</age>
+        <Telephone>+86234567890</Telephone>
+    </Employe>
+    <Employe idEmploye="F" idEnt="VV" idC="Fa" idB="U">
+        <nomE>Girard</nomE>
+        <prenomE>Isabelle</prenomE>
+      
+        <age>29</age>
+        <Telephone>+86789012345</Telephone>
+    </Employe>
+    <Employe idEmploye="G" idEnt="VV" idC="Gh" idB="T">
+        <nomE>Moreau</nomE>
+        <prenomE>Luc</prenomE>
+        
+        <age>38</age>
+        <Telephone>+86567890123</Telephone>
+    </Employe>
+    <Employe idEmploye="H" idEnt="VV" idC="Hl">
+        <nomE>Roux</nomE>
+        <prenomE>Anna</prenomE>
+       
+        <age>27</age>
+        <Telephone>+86034567801</Telephone>
+    </Employe>
+    <Employe idEmploye="I" idEnt="VV" >
+        <nomE>Fournier</nomE>
+        <prenomE>Marc</prenomE>
+        
+        <age>33</age>
+        <Telephone>+86089012356</Telephone>
+    </Employe>
+    <Employe idEmploye="J" idEnt="VV"  idB="Q">
+        <nomE>Caron</nomE>
+        <prenomE>Sophie</prenomE>
+       
+        <age>31</age>
+        <Telephone>+86123456789</Telephone>
+    </Employe>
+    <!-- Bonus -->
+    <Bonus idB="X">
+        <Montant>1000</Montant>
+        <raison>Performance</raison>
+        <date>2024-02-01</date>
+    </Bonus>
+    <Bonus idB="Y" idEmploye="B">
+        <Montant>800</Montant>
+        <raison>Innovation</raison>
+        <date>2024-02-15</date>
+    </Bonus>
+    <Bonus idB="Z">
+        <Montant>1200</Montant>
+        <raison>Excellence</raison>
+        <date>2024-03-10</date>
+    </Bonus>
+    <Bonus idB="W">
+        <Montant>600</Montant>
+        <raison>Anniversaire</raison>
+        <date>2024-03-20</date>
+    </Bonus>
+    <Bonus idB="V" idEmploye="E">
+        <Montant>1100</Montant>
+        <raison>Leadership</raison>
+        <date>2024-04-05</date>
+    </Bonus>
+    <Bonus idB="U" idEmploye="F">
+        <Montant>750</Montant>
+        <raison>Reussite collective</raison>
+        <date>2024-04-15</date>
+    </Bonus>
+    <Bonus idB="T" idEmploye="G">
+        <Montant>900</Montant>
+        <raison>Innovation</raison>
+        <date>2024-05-01</date>
+    </Bonus>
+    <Bonus idB="S">
+        <Montant>950</Montant>
+        <raison>Motivation</raison>
+        <date>2024-05-15</date>
+    </Bonus>
+    <Bonus idB="R">
+        <Montant>1300</Montant>
+        <raison>Performance exceptionnelle</raison>
+        <date>2024-06-01</date>
+    </Bonus>
+    <Bonus idB="Q" idEmploye="J">
+        <Montant>700</Montant>
+        <raison>Recompense speciale</raison>
+        <date>2024-06-15</date>
+    </Bonus>
+    <!-- salaire -->
+    <Salaire idS="K" idEmploye="A">
+        <Montant>55000</Montant>
+        <dateVersement>2024-02-28</dateVersement>
+    </Salaire>
+    <Salaire idS="L" idEmploye="B">
+        <Montant>62000</Montant>
+        <dateVersement>2024-02-28</dateVersement>
+    </Salaire>
+    <Salaire idS="M" idEmploye="C">
+        <Montant>58000</Montant>
+        <dateVersement>2024-02-28</dateVersement>
+    </Salaire >
+    <Salaire idS="N" idEmploye="D">
+        <Montant>49000</Montant>
+        <dateVersement>2024-03-05</dateVersement>
+    </Salaire>
+    <Salaire idS="O" idEmploye="E">
+        <Montant>60000</Montant>
+        <dateVersement>2024-03-20</dateVersement>
+    </Salaire>
+    <Salaire idS="P" idEmploye="F">
+        <Montant>56000</Montant>
+        <dateVersement>2024-04-01</dateVersement>
+    </Salaire>
+    <Salaire idS="Qc" idEmploye="G">
+        <Montant>54000</Montant>
+        <dateVersement>2024-04-15</dateVersement>
+    </Salaire>
+    <Salaire idS="Ryc" idEmploye="H">
+        <Montant>57000</Montant>
+        <dateVersement>2024-05-01</dateVersement>
+    </Salaire>
+    <Salaire idS="Sz" idEmploye="I">
+        <Montant>59000</Montant>
+        <dateVersement>2024-05-15</dateVersement>
+    </Salaire>
+    <Salaire idS="Tq" idEmploye="J">
+        <Montant>63000</Montant>
+        <dateVersement>2024-06-01</dateVersement>
+    </Salaire >
+    <!-- Conge -->
+    <Conge idC="Aa" idEmploye="A">
+        <date_debut>2024-03-01</date_debut>
+        <date_fin>2024-03-10</date_fin>
+        <raisonC>Conge annuel</raisonC>
+    </Conge>
+    <Conge idC="Bb" idEmploye="B">
+        <date_debut>2024-04-15</date_debut>
+        <date_fin>2024-04-20</date_fin>
+        <raisonC>Conge maladie</raisonC>
+    </Conge>
+    <Conge idC="Cb" idEmploye="C">
+        <date_debut>2024-05-01</date_debut>
+        <date_fin>2024-05-10</date_fin>
+        <raisonC>Conge annuel</raisonC>
+    </Conge>
+    <Conge idC="Dg">
+        <date_debut>2024-06-01</date_debut>
+        <date_fin>2024-06-10</date_fin>
+        <raisonC>Conge paternite</raisonC>
+    </Conge>
+    <Conge idC="Es" idEmploye="E">
+        <date_debut>2024-07-15</date_debut>
+        <date_fin>2024-07-25</date_fin>
+        <raisonC>Conge maternite</raisonC>
+    </Conge>
+    <Conge idC="Fa" idEmploye="F">
+        <date_debut>2024-08-01</date_debut>
+        <date_fin>2024-08-10</date_fin>
+        <raisonC>Conge sans solde</raisonC>
+    </Conge>
+    <Conge idC="Gh" idEmploye="G">
+        <date_debut>2024-09-05</date_debut>
+        <date_fin>2024-09-15</date_fin>
+        <raisonC>Conge annuel</raisonC>
+    </Conge>
+    <Conge idC="Hl" idEmploye="H">
+        <date_debut>2024-10-01</date_debut>
+        <date_fin>2024-10-10</date_fin>
+        <raisonC>Formation professionnelle</raisonC>
+    </Conge>
+    <Conge idC="Ip">
+        <date_debut>2024-11-15</date_debut>
+        <date_fin>2024-11-25</date_fin>
+        <raisonC>Conge maladie</raisonC>
+    </Conge>
+    <Conge idC="Jt" >
+        <date_debut>2024-12-01</date_debut>
+        <date_fin>2024-12-10</date_fin>
+        <raisonC>Conge annuel</raisonC>
+    </Conge>
+</entreprise>

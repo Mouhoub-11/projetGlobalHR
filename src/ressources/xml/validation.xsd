@@ -1,0 +1,75 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="entreprise">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Employe" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Bonus" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Salaire" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="Conge" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="idEnt" type="xs:ID" use="required"/>
+      <xs:attribute name="nomEnt" type="xs:string" use="required"/>
+      <xs:attribute name="localisation" type="xs:string" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Employe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="nomE" type="xs:string"/>
+        <xs:element name="prenomE" type="xs:string"/>
+        <xs:element name="age" type="xs:integer"/>
+        <xs:element name="Telephone" type="TelephoneType"/>
+      </xs:sequence>
+      <xs:attribute name="idEmploye" type="xs:ID" use="required"/>
+      <xs:attribute name="idEnt" type="xs:IDREF" use="required"/>
+      <xs:attribute name="idC" type="xs:IDREF"/>
+      <xs:attribute name="idB" type="xs:IDREF" />
+
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="TelephoneType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\+86\d{9}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:element name="Bonus">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Montant" type="xs:decimal"/>
+        <xs:element name="raison" type="xs:string"/>
+        <xs:element name="date" type="xs:date"/>
+      </xs:sequence>
+      <xs:attribute name="idB" type="xs:ID" use="required"/>
+      <xs:attribute name="idEmploye" type="xs:IDREF"/>
+
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Salaire">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Montant" type="xs:decimal"/>
+        <xs:element name="dateVersement" type="xs:date"/>
+      </xs:sequence>
+      <xs:attribute name="idS" type="xs:ID" use="required"/>
+      <xs:attribute name="idEmploye" type="xs:IDREF" use="required"/>
+      
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Conge">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="date_debut" type="xs:date"/>
+        <xs:element name="date_fin" type="xs:date"/>
+        <xs:element name="raisonC" type="xs:string"/>
+      </xs:sequence>
+      <xs:attribute name="idC" type="xs:ID" use="required"/>
+      <xs:attribute name="idEmploye" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
