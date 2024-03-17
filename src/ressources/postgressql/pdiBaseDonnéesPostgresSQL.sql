@@ -1,4 +1,11 @@
-                                       """ BD PostgresSQL"""
+
+
+CREATE TABLE Entreprise (
+    IdEts SERIAL PRIMARY KEY,
+    NomEts VARCHAR(255),
+    LocalisationEts VARCHAR(255)
+);
+
 CREATE TABLE Employé (
     IdEmploye SERIAL PRIMARY KEY,
     NomEmploye VARCHAR(255),
@@ -8,12 +15,6 @@ CREATE TABLE Employé (
     TelEmploye VARCHAR(20),
     IdEts INT,
     FOREIGN KEY (IdEts) REFERENCES Entreprise(IdEts)
-);
-
-CREATE TABLE Entreprise (
-    IdEts SERIAL PRIMARY KEY,
-    NomEts VARCHAR(255),
-    LocalisationEts VARCHAR(255)
 );
 
 CREATE TABLE Appartient(
@@ -42,7 +43,7 @@ CREATE TABLE prendre (
 );
 
 CREATE TABLE Bonus (
-    IsBonus SERIAL PRIMARY KEY,
+    IdBonus SERIAL PRIMARY KEY,
     MontantBonus DECIMAL(10, 2),
     RaisonBonus VARCHAR(255),
     DateBonus DATE
@@ -56,10 +57,11 @@ CREATE TABLE Obtenir (
     PRIMARY KEY (IdEmploye, IdBonus)
 );
 
+
 CREATE TABLE salaire (
-    IdSalaire INT AUTO_INCREMENT PRIMARY KEY,
+    IdSalaire SERIAL PRIMARY KEY,
     MontantSalaire DECIMAL(10, 2),
     DateVersementSalaire DATE,
     IdEmploye INT,
     FOREIGN KEY (IdEmploye) REFERENCES Employé(IdEmploye)
-);
+); 
