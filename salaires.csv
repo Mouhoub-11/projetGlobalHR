@@ -1,0 +1,21 @@
+IDS,Montant,DateVersement,MethodeCalcul,IDEmploye
+301,55000,2024-02-28,Salaire fixe,101
+302,62000,2024-02-28,Salaire fixe,102
+303,58000,2024-02-28,Salaire horaire,103
+304,49000,2024-03-05,Salaire horaire,104
+305,60000,2024-03-20,Salaire horaire,105
+306,56000,2024-04-01,Salaire fixe,106
+307,54000,2024-04-15,Salaire fixe,107
+308,57000,2024-05-01,Salaire fixe,108
+309,59000,2024-05-15,Salaire fixe,109
+310,63000,2024-06-01,Salaire fixe,110
+311,55000,2024-06-30,Salaire horaire,111
+312,62000,2024-07-31,Salaire horaire,112
+313,58000,2024-08-31,Salaire fixe,113
+314,49000,2024-09-30,Salaire fixe,114
+315,60000,2024-10-31,Salaire fixe,115
+316,56000,2024-11-30,Salaire fixe,116
+317,54000,2024-12-31,Salaire fixe,117
+318,57000,2025-01-31,Salaire fixe,118
+319,59000,2025-02-28,Salaire fixe,119
+320,63000,2025-03-31,Salaire fixe,120

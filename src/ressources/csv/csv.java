@@ -7,27 +7,28 @@ public class csv {
 
 	public static void main(String[] args) {
 		String entreprise = "idE,NomEntreprise,Localisation, \n" + "1,DeutscheFirma,Berlin\n";
-		String employees = "IDEmploye,NomE,PrenomE,age,Tel,Poste,departement,idC,idB,idEnt"
-				+ "101,Müller,Hans,35,+49123456789,Directeur,Marketing,201,1"
-				+ "102,Schmidt,Anna,28,+49123456780,Ingénieur,Technologie,202,1"
-				+ "103,Wagner,Michael,40,+49123456781,Analyste,Finance,203,1"
-				+ "104,Schulz,Maria,33,+49123456782,Chargé de projet,Informatique,204,1"
-				+ "105,Fischer,Andreas,31,+49123456783,Technicien,R&D,205,1"
-				+ "106,Koch,Sabine,29,+49123456784,Secrétaire,Ressources Humaines,206,1"
-				+ "107,Bauer,Thomas,37,+49123456785,Manager,Ventes,207,1"
-				+ "108,Schröder,Julia,34,+49123456786,Consultant,Stratégie,208,1"
-				+ "109,Hoffmann,Alexander,36,+49123456787,Analyste,Marketing,209,1"
-				+ "110,Richter,Laura,30,+49123456788,Ingénieur,Technologie,210,1"
-				+ "111,Meyer,Max,38,+49123456789,Directeur,Finance,211,1"
-				+ "112,Schneider,Lena,32,+49123456790,Chargé de projet,Informatique,212,1"
-				+ "113,Becker,Simon,29,+49123456791,Technicien,R&D,213,1"
-				+ "114,Krüger,Julia,31,+49123456792,Manager,Ressources Humaines,214,1"
-				+ "115,Schwarz,Frank,36,+49123456793,Consultant,Stratégie,215,1"
-				+ "116,Hofmann,Lisa,33,+49123456794,Ingénieur,Technologie,216,1"
-				+ "117,Fuchs,Philipp,39,+49123456795,Directeur,Ventes,217,1"
-				+ "118,Peters,Sarah,35,+49123456796,Secrétaire,Ressources Humaines,218,1"
-				+ "119,Berger,Matthias,37,+49123456797,Technicien,R&D,219,1"
-				+ "120,Wolf,Katharina,30,+49123456798,Manager,Ventes,220,1";
+		String employees = "IDEmploye,NomE,PrenomE,age,Tel,Poste,departement,idC,idB,idEnt\n" +
+                "101,Müller,Hans,35,+49123456789,Directeur,Marketing,201,1\n" +
+                "102,Schmidt,Anna,28,+49123456780,Ingénieur,Technologie,202,1\n" +
+                "103,Wagner,Michael,40,+49123456781,Analyste,Finance,203,1\n" +
+                "104,Schulz,Maria,33,+49123456782,Chargé de projet,Informatique,204,1\n" +
+                "105,Fischer,Andreas,31,+49123456783,Technicien,R&D,205,1\n" +
+                "106,Koch,Sabine,29,+49123456784,Secrétaire,Ressources Humaines,206,1\n" +
+                "107,Bauer,Thomas,37,+49123456785,Manager,Ventes,207,1\n" +
+                "108,Schröder,Julia,34,+49123456786,Consultant,Stratégie,208,1\n" +
+                "109,Hoffmann,Alexander,36,+49123456787,Analyste,Marketing,209,1\n" +
+                "110,Richter,Laura,30,+49123456788,Ingénieur,Technologie,210,1\n" +
+                "111,Meyer,Max,38,+49123456789,Directeur,Finance,211,1\n" +
+                "112,Schneider,Lena,32,+49123456790,Chargé de projet,Informatique,212,1\n" +
+                "113,Becker,Simon,29,+49123456791,Technicien,R&D,213,1\n" +
+                "114,Krüger,Julia,31,+49123456792,Manager,Ressources Humaines,214,1\n" +
+                "115,Schwarz,Frank,36,+49123456793,Consultant,Stratégie,215,1\n" +
+                "116,Hofmann,Lisa,33,+49123456794,Ingénieur,Technologie,216,1\n" +
+                "117,Fuchs,Philipp,39,+49123456795,Directeur,Ventes,217,1\n" +
+                "118,Peters,Sarah,35,+49123456796,Secrétaire,Ressources Humaines,218,1\n" +
+                "119,Berger,Matthias,37,+49123456797,Technicien,R&D,219,1\n" +
+                "120,Wolf,Katharina,30,+49123456798,Manager,Ventes,220,1\n";
+
 
 		String conges = "IDC,DatedebC,DatefinC,RaisonC,idEmploye\n" + "401,2024-03-01,2024-03-10,Congé annuel,101\n"
 				+ "402,2024-04-15,2024-04-20,Congé maladie,102\n" + "403,2024-05-01,2024-05-10,Congé annuel,103\n"

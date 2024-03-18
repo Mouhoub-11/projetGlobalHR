@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ressources.postgressql.postgressqlDAO;
+import model.postgressqlDAO;
 
 public class mysqlDAO {
     private Connection connection;
@@ -76,6 +76,7 @@ public class mysqlDAO {
 
 
 
+    
     public BigDecimal calculerDepensesSalaires() throws SQLException {
         BigDecimal depensesTotales = BigDecimal.ZERO;
         String query = "SELECT SUM(MontantSalaire) AS TotalSalaires FROM salaire";
@@ -91,7 +92,7 @@ public class mysqlDAO {
     public Map<String, BigDecimal> salaireMoyenParEntreprise() throws SQLException {
         Map<String, BigDecimal> salairesMoyens = new HashMap<>();
         String query = "SELECT e.NomEts, AVG(s.MontantSalaire) AS SalaireMoyen " +
-                "FROM Employe e " +
+                "FROM Employé e " +
                 "JOIN Entreprise et ON e.IdEts = et.IdEts " +
                 "JOIN salaire s ON e.IdEmploye = s.IdEmploye " +
                 "GROUP BY e.IdEts";
@@ -108,7 +109,7 @@ public class mysqlDAO {
 
     public Map<Integer, Integer> nombreTotalJoursCongeParEmploye() throws SQLException {
         Map<Integer, Integer> joursCongeParEmploye = new HashMap<>();
-        String query = "SELECT IdEmploye, SUM(DATEDIFF(DateFinConge, DateDebConge) + 1) AS TotalJoursConge " +
+        String query = "SELECT IdEmployé, SUM(DATEDIFF(DateFinConge, DateDebConge) + 1) AS TotalJoursConge " +
                 "FROM Congés " +
                 "GROUP BY IdEmploye";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -142,8 +143,8 @@ public class mysqlDAO {
         List<Integer> employesAvecCongesEtBonus = new ArrayList<>();
         String query = "SELECT DISTINCT p.IdEmploye " +
                 "FROM prendre p " +
-                "JOIN Obtenir o ON p.IdEmploye = o.IdEmploye " +
-                "JOIN Congés c ON p.IdEmploye = c.IdEmploye " +
+                "JOIN Obtenir o ON p.IdEmploye = o.IdEmploye" +
+                "JOIN Congés c ON p.IdEmployé = c.IdEmployé " +
                 "JOIN Bonus b ON o.IdBonus = b.IdBonus " +
                 "WHERE c.DateDebConge <= b.DateBonus AND c.DateFinConge >= b.DateBonus";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -195,7 +196,7 @@ public class mysqlDAO {
         Map<Integer, Object[]> bonusEtSalaireParEmploye = new HashMap<>();
         String query = "SELECT e.IdEmploye, SUM(b.MontantBonus) AS TotalBonus, AVG(s.MontantSalaire) AS SalaireMoyen " +
                 "FROM Employe e " +
-                "LEFT JOIN Obtenir o ON e.IdEmploye = o.IdEmploye " +
+                "LEFT JOIN Obtenir o ON e.IdEmploye = o.IdEmploye" +
                 "LEFT JOIN Bonus b ON o.IdBonus = b.IdBonus " +
                 "LEFT JOIN salaire s ON e.IdEmploye = s.IdEmploye " +
                 "LEFT JOIN Congés c ON e.IdEmploye = c.IdEmploye " +
@@ -267,8 +268,8 @@ public class mysqlDAO {
 
     // Exemple d'utilisation de la connexion
     public static void main(String[] args) {
-        try (Connection connection = postgressqlDAO.getConnection()) {
-            postgressqlDAO employeDAO = new postgressqlDAO(connection);
+        try (Connection connection = mysqlDAO.getConnection()) {
+            mysqlDAO employeDAO = new mysqlDAO(connection);
 
             // Dépenses totales de salaires pour l'entreprise
             BigDecimal depensesSalaires = employeDAO.calculerDepensesSalaires();

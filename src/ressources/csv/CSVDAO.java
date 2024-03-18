@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -225,17 +226,31 @@ public class CSVDAO {
             br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                int idEmploye = Integer.parseInt(values[0]); // L'identifiant de l'employé est à l'index 0 dans le fichier CSV des salaires
-                double salaire = Double.parseDouble(values[1]); // Le montant du salaire est à l'index 1
-                LocalDate dateSalaire = LocalDate.parse(values[3], DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Date du salaire est à l'index 3
-
-                if (bonusParEmploye.containsKey(idEmploye) && dateSalaire.isAfter(debutPlage) && dateSalaire.isBefore(finPlage)) {
-                    System.out.println("Employé avec ID " + idEmploye + " a reçu un bonus de " + bonusParEmploye.get(idEmploye) + " et a un salaire moyen de " + salaire + " dans la plage de dates spécifiée.");
+                
+                // Ajouter la vérification de la longueur du tableau ici
+                if (values.length > 3) {
+                    try {
+                        LocalDate dateSalaire = LocalDate.parse(values[3], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        // Continuer le traitement avec la date correctement parsée
+                    } catch (DateTimeParseException e) {
+                        // Gérer le cas où la valeur n'est pas une date valide
+                        System.out.println("La valeur à l'index 3 n'est pas une date valide : " + values[3]);
+                        // Passez à la ligne suivante
+                        continue;
+                    }
+                } else {
+                    // Gérer le cas où la ligne ne contient pas suffisamment de valeurs
+                    System.out.println("La ligne ne contient pas suffisamment de valeurs pour extraire la date de salaire.");
+                    // Passez à la ligne suivante
+                    continue;
                 }
+                
+                // Continuer avec le reste du traitement des données
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
+
     }
 
     // Calculer le montant total des bonus distribués chaque mois de l'année précédente
@@ -285,9 +300,9 @@ public class CSVDAO {
 
     public static void main(String[] args) {
         // Chemins des fichiers CSV
-        String salairesFilePath = "C:\\Users\\DELL\\Desktop\\csv\salaires.csv";
+        String salairesFilePath = "C:\\Users\\DELL\\Desktop\\csv\\salaires.csv";
         String congesFilePath =  "C:\\Users\\DELL\\Desktop\\csv\\conges.csv";
-        String bonusesFilePath = "C:\\Users\\DELL\\Desktop\\csv\bonuses.csv";
+        String bonusesFilePath = "C:\\Users\\DELL\\Desktop\\csv\\bonuses.csv";
         
         // Création de l'instance du DAO
         CSVDAO csvDAO = new CSVDAO(salairesFilePath, congesFilePath, bonusesFilePath);

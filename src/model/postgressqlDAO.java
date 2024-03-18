@@ -1,4 +1,4 @@
-package ressources.postgressql;
+package model;
 
 import java.sql.*;
 import java.sql.Date;
@@ -16,7 +16,7 @@ public class postgressqlDAO {
     }
     
     public void insererEmploye(String nom, String prenom, BigDecimal salaire, int age, String tel, int idEts) throws SQLException {
-        String query = "INSERT INTO Employé (NomEmploye, PrenomEmploye, SalaireEmploye, AgeEmploye, TelEmploye, IdEts) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO \"Employé\" (\"NomEmploye\", \"PrenomEmploye\", \"SalaireEmploye\", \"AgeEmploye\", \"TelEmploye\", \"IdEts\") VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, nom);
             statement.setString(2, prenom);
@@ -27,9 +27,9 @@ public class postgressqlDAO {
             statement.executeUpdate();
         }
     }
-    
+
     public void modifierEmploye(int idEmploye, String nouveauNom, String nouveauPrenom, BigDecimal nouveauSalaire, int nouvelAge, String nouveauTel, int nouvelIdEts) throws SQLException {
-        String query = "UPDATE Employé SET NomEmploye = ?, PrenomEmploye = ?, SalaireEmploye = ?, AgeEmploye = ?, TelEmploye = ?, IdEts = ? WHERE IdEmploye = ?";
+        String query = "UPDATE \"Employé\" SET \"NomEmploye\" = ?, \"PrenomEmploye\" = ?, \"SalaireEmploye\" = ?, \"AgeEmploye\" = ?, \"TelEmploye\" = ?, \"IdEts\" = ? WHERE \"IdEmploye\" = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, nouveauNom);
             statement.setString(2, nouveauPrenom);
@@ -41,9 +41,10 @@ public class postgressqlDAO {
             statement.executeUpdate();
         }
     }
-    
+
+
     public void supprimerEmploye(int idEmploye) throws SQLException {
-        String query = "DELETE FROM Employé WHERE IdEmploye = ?";
+        String query = "DELETE FROM \"Employé\" WHERE \"IdEmploye\" = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, idEmploye);
             statement.executeUpdate();
@@ -51,11 +52,10 @@ public class postgressqlDAO {
     }
 
 
-
-
-    public BigDecimal calculerDepensesSalaires() throws SQLException {
+     public BigDecimal calculerDepensesSalaires() throws SQLException {
         BigDecimal depensesTotales = BigDecimal.ZERO;
-        String query = "SELECT SUM(MontantSalaire) AS TotalSalaires FROM salaire";
+        String query = "SELECT SUM(\"MontantSalaire\") AS \"TotalSalaires\" FROM salaire";
+
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -65,13 +65,14 @@ public class postgressqlDAO {
         return depensesTotales;
     }
 
-    public Map<String, BigDecimal> salaireMoyenParEntreprise() throws SQLException {
+     public Map<String, BigDecimal> salaireMoyenParEntreprise() throws SQLException {
         Map<String, BigDecimal> salairesMoyens = new HashMap<>();
-        String query = "SELECT e.NomEts, AVG(s.MontantSalaire) AS SalaireMoyen " +
-                "FROM Employe e " +
-                "JOIN Entreprise et ON e.IdEts = et.IdEts " +
-                "JOIN salaire s ON e.IdEmploye = s.IdEmploye " +
-                "GROUP BY e.IdEts";
+
+        String query = "SELECT et.\"NomEts\", AVG(s.\"MontantSalaire\") AS \"SalaireMoyen\" " +
+                "FROM \"Employé\" e " +
+                "JOIN \"Entreprise\" et ON e.\"IdEts\" = et.\"IdEts\" " +
+                "JOIN \"salaire\" s ON e.\"IdEmploye\" = s.\"IdEmploye\" " +
+                "GROUP BY et.\"IdEts\"";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -83,11 +84,13 @@ public class postgressqlDAO {
         return salairesMoyens;
     }
 
+
+
     public Map<Integer, Integer> nombreTotalJoursCongeParEmploye() throws SQLException {
         Map<Integer, Integer> joursCongeParEmploye = new HashMap<>();
-        String query = "SELECT IdEmploye, SUM(DATEDIFF(DateFinConge, DateDebConge) + 1) AS TotalJoursConge " +
-                "FROM Congés " +
-                "GROUP BY IdEmploye";
+        String query = "SELECT \"IdEmploye\", SUM(EXTRACT(DAY FROM (\"DateFinConge\" - \"DateDebConge\") + 1)) AS \"TotalJoursConge\" " +
+                "FROM \"Congés\" " +
+                "GROUP BY \"IdEmploye\"";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -101,10 +104,10 @@ public class postgressqlDAO {
 
     public List<Integer> employesSansBonus() throws SQLException {
         List<Integer> employesSansBonus = new ArrayList<>();
-        String query = "SELECT p.IdEmploye " +
-                "FROM prendre p " +
-                "LEFT JOIN Obtenir o ON p.IdEmploye = o.IdEmploye " +
-                "WHERE o.IdEmploye IS NULL";
+        String query = "SELECT p.\"IdEmploye\" " +
+                "FROM \"prendre\" p " +
+                "LEFT JOIN \"Obtenir\" o ON p.\"IdEmploye\" = o.\"IdEmploye\" " +
+                "WHERE o.\"IdEmploye\" IS NULL";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -115,14 +118,14 @@ public class postgressqlDAO {
         return employesSansBonus;
     }
 
-    public List<Integer> employesAvecCongesEtBonus() throws SQLException {
+     public List<Integer> employesAvecCongesEtBonus() throws SQLException {
         List<Integer> employesAvecCongesEtBonus = new ArrayList<>();
-        String query = "SELECT DISTINCT p.IdEmploye " +
-                "FROM prendre p " +
-                "JOIN Obtenir o ON p.IdEmploye = o.IdEmploye " +
-                "JOIN Congés c ON p.IdEmploye = c.IdEmploye " +
-                "JOIN Bonus b ON o.IdBonus = b.IdBonus " +
-                "WHERE c.DateDebConge <= b.DateBonus AND c.DateFinConge >= b.DateBonus";
+        String query = "SELECT DISTINCT p.\"IdEmploye\" " +
+                "FROM \"prendre\" p " +
+                "JOIN \"Obtenir\" o ON p.\"IdEmploye\" = o.\"IdEmploye\" " +
+                "JOIN \"Congés\" c ON p.\"IdEmploye\" = c.\"IdEmploye\" " +
+                "JOIN \"Bonus\" b ON o.\"IdBonus\" = b.\"IdBonus\" " +
+                "WHERE c.\"DateDebConge\" <= b.\"DateBonus\" AND c.\"DateFinConge\" >= b.\"DateBonus\"";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -132,13 +135,13 @@ public class postgressqlDAO {
         }
         return employesAvecCongesEtBonus;
     }
-
+    
     public Map<Integer, Double> dureeMoyenneCongeParEmploye() throws SQLException {
         Map<Integer, Double> dureeMoyenneCongeParEmploye = new HashMap<>();
-        String query = "SELECT IdEmploye, AVG(DATEDIFF(DateFinConge, DateDebConge) + 1) AS DureeMoyenneConge " +
-                "FROM Congés " +
-                "GROUP BY IdEmploye " +
-                "ORDER BY AVG(DATEDIFF(DateFinConge, DateDebConge) + 1) DESC";
+        String query = "SELECT \"IdEmploye\", AVG(EXTRACT(DAY FROM (\"DateFinConge\" - \"DateDebConge\") + 1)) AS \"DureeMoyenneConge\" " +
+                "FROM \"Congés\" " +
+                "GROUP BY \"IdEmploye\" " +
+                "ORDER BY AVG(EXTRACT(DAY FROM (\"DateFinConge\" - \"DateDebConge\") + 1)) DESC";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -150,83 +153,15 @@ public class postgressqlDAO {
         return dureeMoyenneCongeParEmploye;
     }
 
-    public List<Integer> employesAvecCongesEtBonusMemePeriode() throws SQLException {
-        List<Integer> employesAvecCongesEtBonus = new ArrayList<>();
-        String query = "SELECT DISTINCT p.IdEmploye " +
-                "FROM prendre p " +
-                "JOIN Obtenir o ON p.IdEmploye = o.IdEmploye " +
-                "JOIN Congés c ON p.IdEmploye = c.IdEmploye " +
-                "JOIN Bonus b ON o.IdBonus = b.IdBonus " +
-                "WHERE c.DateDebConge <= b.DateBonus AND c.DateFinConge >= b.DateBonus";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int idEmploye = resultSet.getInt("IdEmploye");
-                employesAvecCongesEtBonus.add(idEmploye);
-            }
-        }
-        return employesAvecCongesEtBonus;
-    }
-
-    public Map<Integer, Object[]> bonusEtSalaireParEmploye(Date startDate, Date endDate) throws SQLException {
-        Map<Integer, Object[]> bonusEtSalaireParEmploye = new HashMap<>();
-        String query = "SELECT e.IdEmploye, SUM(b.MontantBonus) AS TotalBonus, AVG(s.MontantSalaire) AS SalaireMoyen " +
-                "FROM Employe e " +
-                "LEFT JOIN Obtenir o ON e.IdEmploye = o.IdEmploye " +
-                "LEFT JOIN Bonus b ON o.IdBonus = b.IdBonus " +
-                "LEFT JOIN salaire s ON e.IdEmploye = s.IdEmploye " +
-                "LEFT JOIN Congés c ON e.IdEmploye = c.IdEmploye " +
-                "WHERE c.DateDebConge BETWEEN ? AND ? " +
-                "GROUP BY e.IdEmploye";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setDate(1, startDate);
-            statement.setDate(2, endDate);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int idEmploye = resultSet.getInt("IdEmploye");
-                BigDecimal totalBonus = resultSet.getBigDecimal("TotalBonus");
-                BigDecimal salaireMoyen = resultSet.getBigDecimal("SalaireMoyen");
-                Object[] data = {totalBonus, salaireMoyen};
-                bonusEtSalaireParEmploye.put(idEmploye, data);
-            }
-        }
-        return bonusEtSalaireParEmploye;
-    }
-
-    public Map<Month, BigDecimal> montantTotalBonusParMoisAnneePrecedente() throws SQLException {
-        Map<Month, BigDecimal> montantTotalBonusParMois = new HashMap<>();
-        // Obtention de la date du premier jour de l'année précédente
-        LocalDate startDate = LocalDate.now().minusYears(1).withMonth(1).withDayOfMonth(1);
-        // Obtention de la date du dernier jour de l'année précédente
-        LocalDate endDate = startDate.withMonth(12).withDayOfMonth(31);
-
-        String query = "SELECT MONTH(DateBonus) AS Mois, SUM(MontantBonus) AS TotalBonus " +
-                "FROM Bonus " +
-                "WHERE DateBonus BETWEEN ? AND ? " +
-                "GROUP BY MONTH(DateBonus)";
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setDate(1, java.sql.Date.valueOf(startDate));
-            statement.setDate(2, java.sql.Date.valueOf(endDate));
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                int mois = resultSet.getInt("Mois");
-                BigDecimal montantTotal = resultSet.getBigDecimal("TotalBonus");
-                montantTotalBonusParMois.put(Month.of(mois), montantTotal);
-            }
-        }
-        return montantTotalBonusParMois;
-    }
 
     public Map<Integer, Double> pourcentageSalaireParRapportMoyenneEntreprise() throws SQLException {
         Map<Integer, Double> pourcentagesSalaire = new HashMap<>();
-        String query = "SELECT e.IdEmploye, s.MontantSalaire, AVG(e2.SalaireEmploye) AS MoyenneEntreprise " +
-                "FROM Employé e " +
-                "JOIN salaire s ON e.IdEmploye = s.IdEmploye " +
-                "JOIN Entreprise et ON e.IdEts = et.IdEts " +
-                "JOIN Employé e2 ON e.IdEts = e2.IdEts " +
-                "GROUP BY e.IdEmploye";
+        String query = "SELECT e.\"IdEmploye\", s.\"MontantSalaire\", AVG(e2.\"SalaireEmploye\") AS \"MoyenneEntreprise\" " +
+                "FROM \"Employé\" e " +
+                "JOIN \"salaire\" s ON e.\"IdEmploye\" = s.\"IdEmploye\" " +
+                "JOIN \"Entreprise\" et ON e.\"IdEts\" = et.\"IdEts\" " +
+                "JOIN \"Employé\" e2 ON e.\"IdEts\" = e2.\"IdEts\" " +
+                "GROUP BY e.\"IdEmploye\"";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
 
@@ -241,63 +176,84 @@ public class postgressqlDAO {
         }
         return pourcentagesSalaire;
     }
-
     public static Connection getConnection() throws SQLException {
         String url = "jdbc:postgresql://localhost:5432/bdUSA";
         String user = "postgres";
         String password = "password";
         return DriverManager.getConnection(url, user, password);
+        
+        
     }
 
 
     public static void main(String[] args) {
+    	
+    	/* try (Connection connection = postgressqlDAO.getConnection()) {
+    	        if (connection.isValid(5)) {
+    	            System.out.println("Connexion à la base de données établie avec succès.");
+    	        } else {
+    	            System.out.println("Impossible d'établir une connexion à la base de données.");
+    	        }
+
+    	        // Vos autres opérations sur la base de données ici...
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    } */
+    	
+    	
         try (Connection connection = postgressqlDAO.getConnection()) {
-            postgressqlDAO employeDAO = new postgressqlDAO(connection);
+            postgressqlDAO postgressqlDAO = new postgressqlDAO(connection);
 
-            // Dépenses totales de salaires pour l'entreprise
-            BigDecimal depensesSalaires = employeDAO.calculerDepensesSalaires();
+            BigDecimal depensesSalaires = postgressqlDAO.calculerDepensesSalaires();
             System.out.println("Dépenses totales de salaires pour l'entreprise : " + depensesSalaires);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+            
 
-            // Liste des employés avec leur salaire moyen par entreprise
-            Map<String, BigDecimal> salaireMoyenParEntreprise = employeDAO.salaireMoyenParEntreprise();
+   /*         // Liste des employés avec leur salaire moyen par entreprise
+            Map<String, BigDecimal> salaireMoyenParEntreprise = postgressqlDAO.salaireMoyenParEntreprise();
             System.out.println("Salaire moyen par entreprise : " + salaireMoyenParEntreprise);
 
             // Nombre total de jours de congé par employé
-            Map<Integer, Integer> joursCongeParEmploye = employeDAO.nombreTotalJoursCongeParEmploye();
+            Map<Integer, Integer> joursCongeParEmploye = postgressqlDAO.nombreTotalJoursCongeParEmploye();
             System.out.println("Nombre total de jours de congé par employé : " + joursCongeParEmploye);
+            // Liste des employés avec leur salaire moyen par entreprise
+            
+
+     
 
             // Liste des employés ayant pris des congés mais n'ayant pas de bonus
-            List<Integer> employesSansBonus = employeDAO.employesSansBonus();
+            List<Integer> employesSansBonus = postgressqlDAO.employesSansBonus();
             System.out.println("Employés ayant pris des congés mais n'ayant pas de bonus : " + employesSansBonus);
 
             // Liste des employés ayant pris des congés et le total des bonus qu'ils ont reçus
-            List<Integer> employesAvecCongesEtBonus = employeDAO.employesAvecCongesEtBonus();
+            List<Integer> employesAvecCongesEtBonus = postgressqlDAO.employesAvecCongesEtBonus();
             System.out.println("Employés ayant pris des congés et le total des bonus qu'ils ont reçus : " + employesAvecCongesEtBonus);
 
             // Calcul de la durée moyenne de congé par employé, avec un classement
-            Map<Integer, Double> dureeMoyenneCongeParEmploye = employeDAO.dureeMoyenneCongeParEmploye();
-            System.out.println("Durée moyenne de congé par employé : " + dureeMoyenneCongeParEmploye);
+            Map<Integer, Double> dureeMoyenneCongeParEmploye = postgressqlDAO.dureeMoyenneCongeParEmploye();
+            System.out.println("Durée moyenne de congé par employé : " + dureeMoyenneCongeParEmploye);  */
 
             // Liste des employés qui ont pris des congés et des bonus dans la même période
-            List<Integer> employesAvecCongesEtBonusMemePeriode = employeDAO.employesAvecCongesEtBonusMemePeriode();
+       /*     List<Integer> employesAvecCongesEtBonusMemePeriode = postgressqlDAO.employesAvecCongesEtBonusMemePeriode();
             System.out.println("Employés qui ont pris des congés et des bonus dans la même période : " + employesAvecCongesEtBonusMemePeriode);
 
             // Liste des employés avec le montant total des bonus et la moyenne de salaire, en incluant uniquement ceux ayant pris des congés dans une plage spécifique de dates
             LocalDate startDate = LocalDate.of(2023, Month.JANUARY, 1);
             LocalDate endDate = LocalDate.of(2023, Month.DECEMBER, 31);
-            Map<Integer, Object[]> bonusEtSalaireParEmploye = employeDAO.bonusEtSalaireParEmploye(java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate));
+            Map<Integer, Object[]> bonusEtSalaireParEmploye = postgressqlDAO.bonusEtSalaireParEmploye(java.sql.Date.valueOf(startDate), java.sql.Date.valueOf(endDate));
             System.out.println("Montant total des bonus et moyenne de salaire : " + bonusEtSalaireParEmploye);
 
             // Calculer le montant total des bonus distribués chaque mois au cours de l'année précédente
-            Map<Month, BigDecimal> montantTotalBonusParMois = employeDAO.montantTotalBonusParMoisAnneePrecedente();
+            Map<Month, BigDecimal> montantTotalBonusParMois = postgressqlDAO.montantTotalBonusParMoisAnneePrecedente();
             System.out.println("Montant total des bonus distribués chaque mois au cours de l'année précédente : " + montantTotalBonusParMois);
 
             // Liste des employés avec le pourcentage du salaire par rapport à la moyenne de leur entreprise
-            Map<Integer, Double> pourcentageSalaireParRapportMoyenneEntreprise = employeDAO.pourcentageSalaireParRapportMoyenneEntreprise();
+            Map<Integer, Double> pourcentageSalaireParRapportMoyenneEntreprise = postgressqlDAO.pourcentageSalaireParRapportMoyenneEntreprise();
             System.out.println("Pourcentage du salaire par rapport à la moyenne de leur entreprise : " + pourcentageSalaireParRapportMoyenneEntreprise);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+       */
+    } 
 }

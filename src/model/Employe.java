@@ -60,7 +60,7 @@ public class Employe {
 		
 
 		public int getAge_Employe() {
-			return IdEmploye;
+			return AgeEmploye;
 		}
 		
 		public void setAge_Employe(int AgeEmploye) {
