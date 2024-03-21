@@ -1,4 +1,4 @@
-package ressources.mysql; 
+package model; 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import model.postgressqlDAO;
 
 public class mysqlDAO {
     private Connection connection;
