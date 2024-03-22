@@ -32,6 +32,7 @@ CREATE TABLE Congés (
     DateDebConge DATE,
     DateFinConge DATE,
     RaisonConge VARCHAR(255)
+    FOREIGN KEY (IdEmploye) REFERENCES Employé(IdEmploye)
 );
 
 CREATE TABLE prendre (
@@ -46,7 +47,9 @@ CREATE TABLE Bonus (
     IdBonus SERIAL PRIMARY KEY,
     MontantBonus DECIMAL(10, 2),
     RaisonBonus VARCHAR(255),
-    DateBonus DATE
+    DateBonus DATE, 
+    FOREIGN KEY (IdEmploye) REFERENCES Employé(IdEmploye),
+
 );
 
 CREATE TABLE Obtenir (

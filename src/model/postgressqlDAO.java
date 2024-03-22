@@ -15,7 +15,7 @@ public class postgressqlDAO {
         this.connection = connection;
     }
     
-  /*  public void insererEmploye(String nom, String prenom, BigDecimal salaire, int age, String tel, int idets) throws SQLException {
+    public void insererEmploye(String nom, String prenom, BigDecimal salaire, int age, String tel, int idets) throws SQLException {
         String query = "INSERT INTO \"employé\" (\"NomEmploye\", \"PrenomEmploye\", \"SalaireEmploye\", \"AgeEmploye\", \"TelEmploye\", \"idets\") VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, nom);
@@ -49,7 +49,7 @@ public class postgressqlDAO {
             statement.setInt(1, idemploye);
             statement.executeUpdate();
         }
-    }  */
+    }  
 
 
      public BigDecimal calculerDepensesSalaires() throws SQLException {
@@ -87,41 +87,96 @@ public class postgressqlDAO {
 
 
      //problem marche pas pour le moment
-    public Map<Integer, Integer> nombreTotalJoursCongeParEmploye() throws SQLException {
-        Map<Integer, Integer> joursCongeParEmploye = new HashMap<>();   
-        String query = "SELECT \"idemploye\", SUM(EXTRACT(DAY FROM (\"datefinconge\" - \"datedebconge\") + 1)) AS \"TotalJoursConge\" " +
-                "FROM \"congés\" " +
-                "GROUP BY \"idemploye\"";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int idemploye = resultSet.getInt("idemploye");
-                int totalJoursConge = resultSet.getInt("TotalJoursConge");
-                joursCongeParEmploye.put(idemploye, totalJoursConge);
-            }
-        }
-        return joursCongeParEmploye;
-    }
+     public static void nombreTotalJoursCongeParEmploye(Connection connection) throws SQLException {
+         PreparedStatement stmt = null;
+         try {
+             // Préparation de la requête SQL
+             String sql = "SELECT e.IdEmploye, e.NomEmploye, e.PrenomEmploye, COUNT(c.IdConge) AS NombreTotalJoursConge " +
+                          "FROM Employé e " +
+                          "INNER JOIN prendre p ON e.IdEmploye = p.IdEmploye " +
+                          "INNER JOIN Congés c ON p.IdConge = c.IdConge " +
+                          "GROUP BY e.IdEmploye, e.NomEmploye, e.PrenomEmploye";
+             stmt = connection.prepareStatement(sql);
+
+             // Exécution de la requête
+             ResultSet rs = stmt.executeQuery();
+
+             // Affichage des résultats
+             System.out.println("\nNombre total de jours de congé par employé :");
+             while (rs.next()) {
+                 int idEmploye = rs.getInt("IdEmploye");
+                 String nom = rs.getString("NomEmploye");
+                 String prenom = rs.getString("PrenomEmploye");
+                 int nombreTotalJoursConge = rs.getInt("NombreTotalJoursConge");
+                 System.out.println("ID : " + idEmploye + ", Employé : " + nom + " " + prenom +
+                                    ", Nombre total de jours de congé : " + nombreTotalJoursConge);
+             }
+
+             // Fermeture des ressources
+             rs.close();
+         } finally {
+             // Fermeture du statement
+             if (stmt != null) {
+                 stmt.close();
+             }
+         }
+     }
 
 
 
-     public List<Integer> employesAvecCongesEtBonus() throws SQLException {
-        List<Integer> employesAvecCongesEtBonus = new ArrayList<>();
-        String query = "SELECT DISTINCT p.\"idemploye\" " +
-                "FROM \"prendre\" p " +
-                "JOIN \"obtenir\" o ON p.\"idemploye\" = o.\"idemploye\" " +
-                "JOIN \"congés\" c ON p.\"idemploye\" = c.\"idemploye\" " +
-                "JOIN \"bonus\" b ON o.\"idbonus\" = b.\"idbonus\" " +
-                "WHERE c.\"datedebconge\" <= b.\"datebonus\" AND c.\"datefinconge\" >= b.\"datebonus\"";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                int idemploye = resultSet.getInt("idemploye");
-                employesAvecCongesEtBonus.add(idemploye);
-            }
-        }
-        return employesAvecCongesEtBonus;
-    }
+//     public List<Integer> employesAvecCongesEtBonus() throws SQLException {
+//        List<Integer> employesAvecCongesEtBonus = new ArrayList<>();
+//        String query = "SELECT DISTINCT p.\"idemploye\" " +
+//                "FROM \"prendre\" p " +
+//                "JOIN \"obtenir\" o ON p.\"idemploye\" = o.\"idemploye\" " +
+//                "JOIN \"congés\" c ON p.\"idemploye\" = c.\"idemploye\" " +
+//                "JOIN \"bonus\" b ON o.\"idbonus\" = b.\"idbonus\" " +
+//                "WHERE c.\"datedebconge\" <= b.\"datebonus\" AND c.\"datefinconge\" >= b.\"datebonus\"";
+//        try (PreparedStatement statement = connection.prepareStatement(query)) {
+//            ResultSet resultSet = statement.executeQuery();
+//            while (resultSet.next()) {
+//                int idemploye = resultSet.getInt("idemploye");
+//                employesAvecCongesEtBonus.add(idemploye);
+//            }
+//        }
+//        return employesAvecCongesEtBonus;
+//    }
+     
+    
+     public static void afficherEmployesAvecCongesEtBonus(Connection connection) throws SQLException {
+         PreparedStatement stmt = null;
+         try {
+             // Préparation de la requête SQL
+             String sql = "SELECT DISTINCT e.NomEmploye, e.PrenomEmploye " +
+                          "FROM Employé e " +
+                          "INNER JOIN prendre p ON e.IdEmploye = p.IdEmploye " +
+                          "INNER JOIN Congés c ON p.IdConge = c.IdConge " +
+                          "INNER JOIN Obtenir o ON e.IdEmploye = o.IdEmploye " +
+                          "INNER JOIN Bonus b ON o.IdBonus = b.IdBonus";
+             stmt = connection.prepareStatement(sql);
+
+             // Exécution de la requête
+             ResultSet rs = stmt.executeQuery();
+
+             // Affichage des résultats
+             System.out.println("Employés ayant eu des congés et des bonus :");
+             while (rs.next()) {
+                 String nom = rs.getString("NomEmploye");
+                 String prenom = rs.getString("PrenomEmploye");
+                 System.out.println(nom + " " + prenom);
+             }
+
+             // Fermeture des ressources
+             rs.close();
+         } finally {
+             // Fermeture du statement
+             if (stmt != null) {
+                 stmt.close();
+             }
+         }
+     }
+
+
     
      public List<Integer> employesSansBonus() throws SQLException {
          List<Integer> employesSansBonus = new ArrayList<>();
@@ -138,6 +193,7 @@ public class postgressqlDAO {
          }
          return employesSansBonus;
      }
+     
      
 //    public Map<Integer, Double> dureeMoyenneCongeParEmploye() throws SQLException {
 //        Map<Integer, Double> dureeMoyenneCongeParEmploye = new HashMap<>();
@@ -252,6 +308,8 @@ public class postgressqlDAO {
     	
         try (Connection connection = postgressqlDAO.getConnection()) {
             postgressqlDAO postgressqlDAO = new postgressqlDAO(connection);
+            
+            
 
             //Depenses salaires
             BigDecimal depensesSalaires = postgressqlDAO.calculerDepensesSalaires();
@@ -276,10 +334,11 @@ public class postgressqlDAO {
             List<Integer> employesSansBonus = postgressqlDAO.employesSansBonus();
             System.out.println("employés ayant pris des congés mais n'ayant pas de bonus : " + employesSansBonus);
 
-            // Liste des employés ayant pris des congés et le total des bonus qu'ils ont reçus
-            List<Integer> employesAvecCongesEtBonus = postgressqlDAO.employesAvecCongesEtBonus();
-            System.out.println("employés ayant pris des congés et le total des bonus qu'ils ont reçus : " + employesAvecCongesEtBonus);
-            
+          
+           
+            afficherEmployesAvecCongesEtBonus(connection);
+            nombreTotalJoursCongeParEmploye(connection);
+
 //            // Calcul de la durée moyenne de congé par employé, avec un classement
 //            Map<Integer, Double> dureeMoyenneCongeParEmploye = postgressqlDAO.dureeMoyenneCongeParEmploye();
 //            System.out.println("Durée moyenne de congé par employé : " + dureeMoyenneCongeParEmploye);  
