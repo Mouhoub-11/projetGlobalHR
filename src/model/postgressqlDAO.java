@@ -122,25 +122,6 @@ public class postgressqlDAO {
          }
      }
 
-
-
-//     public List<Integer> employesAvecCongesEtBonus() throws SQLException {
-//        List<Integer> employesAvecCongesEtBonus = new ArrayList<>();
-//        String query = "SELECT DISTINCT p.\"idemploye\" " +
-//                "FROM \"prendre\" p " +
-//                "JOIN \"obtenir\" o ON p.\"idemploye\" = o.\"idemploye\" " +
-//                "JOIN \"congés\" c ON p.\"idemploye\" = c.\"idemploye\" " +
-//                "JOIN \"bonus\" b ON o.\"idbonus\" = b.\"idbonus\" " +
-//                "WHERE c.\"datedebconge\" <= b.\"datebonus\" AND c.\"datefinconge\" >= b.\"datebonus\"";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                int idemploye = resultSet.getInt("idemploye");
-//                employesAvecCongesEtBonus.add(idemploye);
-//            }
-//        }
-//        return employesAvecCongesEtBonus;
-//    }
      
     
      public static void afficherEmployesAvecCongesEtBonus(Connection connection) throws SQLException {
@@ -214,6 +195,9 @@ public class postgressqlDAO {
 //        }
 //        return dureeMoyenneCongeParEmploye;
 //    }  
+     
+     // Méthode pour calculer la durée moyenne de congé par employé, avec un classement
+
 
     /* public Map<Integer, Integer> dureeMoyenneCongeParEmploye() throws SQLException {
         Map<Integer, Integer> joursCongeParEmploye = new HashMap<>();
@@ -232,29 +216,7 @@ public class postgressqlDAO {
     }  */
     
 
-//     public Map<Integer, Double> pourcentageSalaireParRapportMoyenneentreprise() throws SQLException {
-//    	    Map<Integer, Double> pourcentagesSalaire = new HashMap<>();
-//    	    String query = "SELECT e.\"idemploye\", AVG(s.\"montantsalaire\") AS \"SalaireMoyen\", AVG(e2.\"salaireemploye\") AS \"Moyenneentreprise\" " +
-//    	            "FROM \"employé\" e " +
-//    	            "JOIN \"salaire\" s ON e.\"idemploye\" = s.\"idemploye\" " +
-//    	            "JOIN \"entreprise\" et ON e.\"idets\" = et.\"idets\" " +
-//    	            "JOIN \"employé\" e2 ON e.\"idets\" = e2.\"idets\" " +
-//    	            "GROUP BY e.\"idemploye\"";
-//    	    
-//    	    try (PreparedStatement statement = connection.prepareStatement(query)) {
-//    	        ResultSet resultSet = statement.executeQuery();
-//
-//    	        while (resultSet.next()) {
-//    	            int idemploye = resultSet.getInt("idemploye");
-//    	            BigDecimal salaire = resultSet.getBigDecimal("SalaireMoyen");
-//    	            BigDecimal moyenneentreprise = resultSet.getBigDecimal("Moyenneentreprise");
-//
-//    	            double pourcentage = (salaire.doubleValue() / moyenneentreprise.doubleValue()) * 100;
-//    	            pourcentagesSalaire.put(idemploye, pourcentage);
-//    	        }
-//    	    }
-//    	    return pourcentagesSalaire;
-//    	}
+
 
      public Map<Integer, Double> pourcentageSalaireParRapportMoyenneentreprise() throws SQLException {
     	    Map<Integer, Double> pourcentagesSalaire = new HashMap<>();
@@ -279,6 +241,7 @@ public class postgressqlDAO {
     	    }
     	    return pourcentagesSalaire;
     	}
+
 
     
     public static Connection getConnection() throws SQLException {
@@ -338,11 +301,12 @@ public class postgressqlDAO {
            
             afficherEmployesAvecCongesEtBonus(connection);
             nombreTotalJoursCongeParEmploye(connection);
+          
 
 //            // Calcul de la durée moyenne de congé par employé, avec un classement
 //            Map<Integer, Double> dureeMoyenneCongeParEmploye = postgressqlDAO.dureeMoyenneCongeParEmploye();
 //            System.out.println("Durée moyenne de congé par employé : " + dureeMoyenneCongeParEmploye);  
-//            
+            
         /*    // Liste des employés qui ont pris des congés et des bonus dans la même période
             List<Integer> employesAvecCongesEtBonusMemePeriode = postgressqlDAO.employesAvecCongesEtBonusMemePeriode();
             System.out.println("employés qui ont pris des congés et des bonus dans la même période : " + employesAvecCongesEtBonusMemePeriode);
