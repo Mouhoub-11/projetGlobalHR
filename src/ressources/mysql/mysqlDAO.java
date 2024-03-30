@@ -1,4 +1,4 @@
-package model; 
+package ressources.mysql; 
 import java.math.BigDecimal;
 
 import java.sql.Connection;

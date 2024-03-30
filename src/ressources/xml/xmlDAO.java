@@ -89,21 +89,64 @@ public class xmlDAO {
 
 //Dépenses totales de salaires pour l'entreprise :
 
-    public void calculerDepensesSalairesEntreprise() {
-        NodeList salaireList = document.getElementsByTagName("salaire");
-        double depensesTotalesSalaires = 0.0;
+//    public void calculerDepensesSalairesEntreprise() {
+//        NodeList salaireList = document.getElementsByTagName("salaire");
+//        double depensesTotalesSalaires = 0.0;
+//
+//        for (int i = 0; i < salaireList.getLength(); i++) {
+//            Element salaireElement = (Element) salaireList.item(i);
+//            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
+//
+//            // Ajouter le montant du salaire aux dépenses totales
+//            depensesTotalesSalaires += montantSalaire;
+//        }
+//
+//        // Afficher les résultats
+//        System.out.println("Dépenses totales de salaires pour l'entreprise : " + depensesTotalesSalaires);
+//    }
+    
+    
+  //Dépenses totales de salaires pour l'entreprise :
 
-        for (int i = 0; i < salaireList.getLength(); i++) {
-            Element salaireElement = (Element) salaireList.item(i);
-            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
 
-            // Ajouter le montant du salaire aux dépenses totales
-            depensesTotalesSalaires += montantSalaire;
-        }
+  //Dépenses totales de salaires pour l'entreprise :
+  
+//    public double calculerDepensesSalairesEntreprise() {
+//        NodeList salaireList = document.getElementsByTagName("salaire");
+//        double depensesTotalesSalaires = 0.0;
+//
+//        for (int i = 0; i < salaireList.getLength(); i++) {
+//            Element salaireElement = (Element) salaireList.item(i);
+//            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
+//
+//            // Ajouter le montant du salaire aux dépenses totales
+//            depensesTotalesSalaires += montantSalaire;
+//        }
+//
+//        return depensesTotalesSalaires; // Retourner la somme des dépenses totales de salaires
+//    }
+    
+    
+ 
+  public double calculerDepensesSalairesEntreprise() {
+      NodeList salaireList = document.getElementsByTagName("salaire");
+      double depensesTotalesSalaires = 0.0;
 
-        // Afficher les résultats
-        System.out.println("Dépenses totales de salaires pour l'entreprise : " + depensesTotalesSalaires);
-    }
+      for (int i = 0; i < salaireList.getLength(); i++) {
+          Element salaireElement = (Element) salaireList.item(i);
+          // Vérifier si l'élément Montant existe avant de récupérer son contenu
+          Node montantNode = salaireElement.getElementsByTagName("Montant").item(0);
+          if (montantNode != null && montantNode.getNodeType() == Node.ELEMENT_NODE) {
+              // Convertir le contenu de Montant en double et l'ajouter aux dépenses totales
+              depensesTotalesSalaires += Double.parseDouble(montantNode.getTextContent());
+          } else {
+              // Gérer le cas où Montant est introuvable ou vide
+              System.out.println("Attention: Montant de salaire manquant ou invalide pour l'élément " + i);
+          }
+      }
+
+      return depensesTotalesSalaires; // Retourner la somme des dépenses totales de salaires
+  }
 
 
 //Nombre total de jours de congé par employé :
@@ -470,80 +513,15 @@ public void afficherEmployesAvecBonusEtMoyenneSalaireDansPlageDates(String dateD
     });
 }
 
-       
-       public void insererEmploye(String idEmploye, String idEnt, String idC, String idB, String nomE, String prenomE, int age, String telephone) {
-    	    Element entrepriseElement = document.getDocumentElement();
-    	    Element employeElement = document.createElement("Employe");
-    	    employeElement.setAttribute("idEmploye", idEmploye);
-    	    employeElement.setAttribute("idEnt", idEnt);
 
-    	    if (idC != null && !idC.isEmpty()) {
-    	        employeElement.setAttribute("idC", idC);
-    	    }
-    	    if (idB != null && !idB.isEmpty()) {
-    	        employeElement.setAttribute("idB", idB);
-    	    }
-
-    	    Element nomEElement = document.createElement("nomE");
-    	    nomEElement.setTextContent(nomE);
-    	    employeElement.appendChild(nomEElement);
-
-    	    Element prenomEElement = document.createElement("prenomE");
-    	    prenomEElement.setTextContent(prenomE);
-    	    employeElement.appendChild(prenomEElement);
-
-    	    Element ageElement = document.createElement("age");
-    	    ageElement.setTextContent(Integer.toString(age));
-    	    employeElement.appendChild(ageElement);
-
-    	    Element telephoneElement = document.createElement("Telephone");
-    	    telephoneElement.setTextContent(telephone);
-    	    employeElement.appendChild(telephoneElement);
-
-    	    entrepriseElement.appendChild(employeElement);
-    	}
-
-    	public void modifierEmploye(String idEmploye, String idEnt, String idC, String idB, String nomE, String prenomE, int age, String telephone) {
-    	    NodeList employeList = document.getElementsByTagName("Employe");
-
-    	    for (int i = 0; i < employeList.getLength(); i++) {
-    	        Element employeElement = (Element) employeList.item(i);
-    	        String idEmployeAttr = employeElement.getAttribute("idEmploye");
-
-    	        if (idEmployeAttr.equals(idEmploye)) {
-    	            employeElement.setAttribute("idEnt", idEnt);
-    	            employeElement.setAttribute("idC", idC);
-    	            employeElement.setAttribute("idB", idB);
-
-    	            employeElement.getElementsByTagName("nomE").item(0).setTextContent(nomE);
-    	            employeElement.getElementsByTagName("prenomE").item(0).setTextContent(prenomE);
-    	            employeElement.getElementsByTagName("age").item(0).setTextContent(Integer.toString(age));
-    	            employeElement.getElementsByTagName("Telephone").item(0).setTextContent(telephone);
-    	            break;
-    	        }
-    	    }
-
-    	}
-    	public void supprimerEmploye(String idEmploye) {
-    	    NodeList employeList = document.getElementsByTagName("Employe");
-
-    	    for (int i = 0; i < employeList.getLength(); i++) {
-    	        Element employeElement = (Element) employeList.item(i);
-    	        String idEmployeAttr = employeElement.getAttribute("idEmploye");
-
-    	        if (idEmployeAttr.equals(idEmploye)) {
-    	            employeElement.getParentNode().removeChild(employeElement);
-    	            break;
-    	        }
-    	    }
-
-    	}
 public static void main(String[] args) {
     String dateDebutPlage = "2024-01-01";
     String dateFinPlage = "2024-12-31";
         xmlDAO entrepriseDAO = new xmlDAO("ressources/xml/bdChina.xml");
+        
+      //  calculerDepensesSalairesEntreprise();
         entrepriseDAO.afficherSalaireMoyenParEntreprise();
-        entrepriseDAO.calculerDepensesSalairesEntreprise();
+    //    entrepriseDAO.calculerDepensesSalairesEntreprise();
         entrepriseDAO.calculerNombreTotalJoursCongeParEmploye();
         entrepriseDAO.afficherEmployesCongesSansBonus();
         entrepriseDAO.afficherEmployesCongesAvecTotalBonus();

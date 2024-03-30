@@ -1,4 +1,4 @@
-package model;
+package ressources.postgressql;
 
 import java.sql.*;
 import java.sql.Date;
