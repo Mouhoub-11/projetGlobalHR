@@ -123,11 +123,11 @@
     </Bonus>
     <!-- salaire -->
     <Salaire idS="K" idEmploye="A">
-        <Montant>55000</Montant>
+        <Montant>55000.0</Montant>
         <dateVersement>2024-02-28</dateVersement>
     </Salaire>
     <Salaire idS="L" idEmploye="B">
-        <Montant>62000</Montant>
+        <Montant>62000.0</Montant>
         <dateVersement>2024-02-28</dateVersement>
     </Salaire>
     <Salaire idS="M" idEmploye="C">

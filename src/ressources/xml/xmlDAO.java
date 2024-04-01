@@ -24,6 +24,42 @@ import org.w3c.dom.NodeList;
 import java.util.NoSuchElementException;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map.Entry;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.Calendar;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import java.util.NoSuchElementException;
+
+
 public class xmlDAO {
     private Scanner scanner;
     private Document document;
@@ -32,7 +68,7 @@ public class xmlDAO {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            this.document = builder.parse("C:\\Users\\DELL\\Desktop\\xml\\bdChina.xml");
+            this.document = builder.parse("C:\\Users\\DELL\\Desktop\\bdChina.xml");
             this.scanner = new Scanner(System.in);
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,98 +91,52 @@ public class xmlDAO {
     }
      //Liste des employés avec leur salaire moyen par entreprise :
 
-    public void afficherSalaireMoyenParEntreprise() {
-        NodeList salaireList = document.getElementsByTagName("salaire");
-        Map<String, Double> sommeSalaireParEntreprise = new HashMap<>();
-        Map<String, Integer> countEmployesParEntreprise = new HashMap<>();
+ public void afficherSalaireMoyenParEntreprise() {
+	    NodeList salaireList = document.getElementsByTagName("Salaire");
+	    Map<String, Double> sommeSalaireParEntreprise = new HashMap<>();
+	    Map<String, Integer> countEmployesParEntreprise = new HashMap<>();
 
-        for (int i = 0; i < salaireList.getLength(); i++) {
-            Element salaireElement = (Element) salaireList.item(i);
-            String idEntreprise = salaireElement.getAttribute("idEmploye");
+	    // Parcourir la liste des salaires pour calculer la somme et compter les employés par entreprise
+	    for (int i = 0; i < salaireList.getLength(); i++) {
+	        Element salaireElement = (Element) salaireList.item(i);
+	        String idEntreprise = salaireElement.getAttribute("idEmploye");
 
-            // Ajouter le montant du salaire à la somme pour l'entreprise correspondante
-            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
-            sommeSalaireParEntreprise.put(idEntreprise, sommeSalaireParEntreprise.getOrDefault(idEntreprise, 0.0) + montantSalaire);
+	        // Ajouter le montant du salaire à la somme pour l'entreprise correspondante
+	        double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
+	        sommeSalaireParEntreprise.put(idEntreprise, sommeSalaireParEntreprise.getOrDefault(idEntreprise, 0.0) + montantSalaire);
 
-            // Compter le nombre d'employés pour chaque entreprise
-            countEmployesParEntreprise.put(idEntreprise, countEmployesParEntreprise.getOrDefault(idEntreprise, 0) + 1);
-        }
+	        // Compter le nombre d'employés pour chaque entreprise
+	        countEmployesParEntreprise.put(idEntreprise, countEmployesParEntreprise.getOrDefault(idEntreprise, 0) + 1);
+	    }
 
-        // Afficher les résultats
-        for (Map.Entry<String, Double> entry : sommeSalaireParEntreprise.entrySet()) {
-            String idEntreprise = entry.getKey();
-            double sommeSalaire = entry.getValue();
-            int countEmployes = countEmployesParEntreprise.get(idEntreprise);
+	    // Afficher le salaire moyen par entreprise
+	    for (Map.Entry<String, Double> entry : sommeSalaireParEntreprise.entrySet()) {
+	        String idEntreprise = entry.getKey();
+	        double sommeSalaire = entry.getValue();
+	        int nombreEmployes = countEmployesParEntreprise.get(idEntreprise);
 
-            // Calculer le salaire moyen
-            double salaireMoyen = sommeSalaire / countEmployes;
-
-            System.out.println("ID Entreprise: " + idEntreprise);
-            System.out.println("Salaire Moyen par Employe: " + salaireMoyen);
-            System.out.println(); // Saut de ligne entre chaque entreprise
-        }
-    }
+	        double salaireMoyen = sommeSalaire / nombreEmployes;
+	        System.out.println("Moyen Salaire Entreprise ID: " + idEntreprise + ", Salaire moyen: " + salaireMoyen);
+	    }
+	}
 
 //Dépenses totales de salaires pour l'entreprise :
 
-//    public void calculerDepensesSalairesEntreprise() {
-//        NodeList salaireList = document.getElementsByTagName("salaire");
-//        double depensesTotalesSalaires = 0.0;
-//
-//        for (int i = 0; i < salaireList.getLength(); i++) {
-//            Element salaireElement = (Element) salaireList.item(i);
-//            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
-//
-//            // Ajouter le montant du salaire aux dépenses totales
-//            depensesTotalesSalaires += montantSalaire;
-//        }
-//
-//        // Afficher les résultats
-//        System.out.println("Dépenses totales de salaires pour l'entreprise : " + depensesTotalesSalaires);
-//    }
-    
-    
-  //Dépenses totales de salaires pour l'entreprise :
+    public void calculerDepensesSalairesEntreprise() {
+        NodeList salaireList = document.getElementsByTagName("Salaire");
+        double depensesTotalesSalaires = 0.0;
 
+        for (int i = 0; i < salaireList.getLength(); i++) {
+            Element salaireElement = (Element) salaireList.item(i);
+            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
 
-  //Dépenses totales de salaires pour l'entreprise :
-  
-//    public double calculerDepensesSalairesEntreprise() {
-//        NodeList salaireList = document.getElementsByTagName("salaire");
-//        double depensesTotalesSalaires = 0.0;
-//
-//        for (int i = 0; i < salaireList.getLength(); i++) {
-//            Element salaireElement = (Element) salaireList.item(i);
-//            double montantSalaire = Double.parseDouble(salaireElement.getElementsByTagName("Montant").item(0).getTextContent());
-//
-//            // Ajouter le montant du salaire aux dépenses totales
-//            depensesTotalesSalaires += montantSalaire;
-//        }
-//
-//        return depensesTotalesSalaires; // Retourner la somme des dépenses totales de salaires
-//    }
-    
-    
- 
-  public double calculerDepensesSalairesEntreprise() {
-      NodeList salaireList = document.getElementsByTagName("salaire");
-      double depensesTotalesSalaires = 0.0;
+            // Ajouter le montant du salaire aux dépenses totales
+            depensesTotalesSalaires += montantSalaire;
+        }
 
-      for (int i = 0; i < salaireList.getLength(); i++) {
-          Element salaireElement = (Element) salaireList.item(i);
-          // Vérifier si l'élément Montant existe avant de récupérer son contenu
-          Node montantNode = salaireElement.getElementsByTagName("Montant").item(0);
-          if (montantNode != null && montantNode.getNodeType() == Node.ELEMENT_NODE) {
-              // Convertir le contenu de Montant en double et l'ajouter aux dépenses totales
-              depensesTotalesSalaires += Double.parseDouble(montantNode.getTextContent());
-          } else {
-              // Gérer le cas où Montant est introuvable ou vide
-              System.out.println("Attention: Montant de salaire manquant ou invalide pour l'élément " + i);
-          }
-      }
-
-      return depensesTotalesSalaires; // Retourner la somme des dépenses totales de salaires
-  }
+        // Afficher les résultats
+        System.out.println("Dépenses totales de salaires CHINA  : " + depensesTotalesSalaires);
+    }
 
 
 //Nombre total de jours de congé par employé :
@@ -183,7 +173,7 @@ public void calculerNombreTotalJoursCongeParEmploye() {
             String idEmploye = entry.getKey();
             int totalJoursConge = entry.getValue();
 
-            System.out.println("ID Employe: " + idEmploye);
+            System.out.println("Nbr total jrs congé chaina ID Employe: " + idEmploye);
             System.out.println("Nombre total de jours de congé: " + totalJoursConge);
             System.out.println(); // Saut de ligne entre chaque employé
         }
@@ -218,7 +208,7 @@ public void afficherEmployesCongesSansBonus() {
 
         // Affiche les résultats
         for (String idEmployeSansBonus : employesAvecConges) {
-            System.out.println("ID Employe avec congés mais sans bonus : " + idEmployeSansBonus);
+            System.out.println("ID Employe avec congés mais sans bonus : CHINA " + idEmployeSansBonus);
         }
     }
 
@@ -255,7 +245,7 @@ public void afficherEmployesCongesAvecTotalBonus() {
             int joursConge = entry.getValue();
             int totalBonus = totalBonusParEmploye.getOrDefault(idEmploye, 0);
 
-            System.out.println("ID Employe: " + idEmploye);
+            System.out.println("Chaina_TB_C_ID Employe: " + idEmploye);
             System.out.println("Nombre total de jours de congé: " + joursConge);
             System.out.println("Total des bonus reçus: " + totalBonus);
             System.out.println(); // Saut de ligne entre chaque employé
@@ -266,7 +256,7 @@ public void afficherEmployesCongesAvecTotalBonus() {
 public void calculerDureeMoyenneCongeParEmploye() {
         NodeList congeList = document.getElementsByTagName("Conge");
         Map<String, Integer> dureeTotaleCongeParEmploye = new HashMap<>();
-        Map<String, Integer> nombreCongesParEmploye = new HashMap<>();
+        Map<String, Integer> nombreCongesParEmploye = new HashMap<>(); 
 
         // Calculer la durée totale des congés et le nombre de congés par employé
         for (int i = 0; i < congeList.getLength(); i++) {
@@ -290,7 +280,7 @@ public void calculerDureeMoyenneCongeParEmploye() {
             int nombreConges = nombreCongesParEmploye.get(idEmploye);
             double dureeMoyenne = (double) dureeTotale / nombreConges;
 
-            System.out.println("ID Employe: " + idEmploye);
+            System.out.println("China_ Conge duree Moyenne_ID Employe: " + idEmploye);
             System.out.println("Duree moyenne des congés: " + dureeMoyenne + " jours");
             System.out.println(); // Saut de ligne entre chaque employé
         }
@@ -338,7 +328,7 @@ public void calculerDureeMoyenneCongeParEmploye() {
 
 //Liste des employés avec le pourcentage du salaire par rapport à la moyenne de leur entreprise :
 public void afficherPourcentageSalaireParRapportMoyenneEntreprise() {
-        NodeList salaireList = document.getElementsByTagName("salaire");
+        NodeList salaireList = document.getElementsByTagName("Salaire");
         Map<String, Double> sommeSalaireParEntreprise = new HashMap<>();
         Map<String, Integer> countEmployesParEntreprise = new HashMap<>();
 
@@ -374,7 +364,7 @@ public void afficherPourcentageSalaireParRapportMoyenneEntreprise() {
                 System.out.println("Pourcentage du salaire par rapport à la moyenne de l'entreprise: " + pourcentage + "%");
                 System.out.println(); // Saut de ligne entre chaque employé
             } else {
-                System.out.println("Les informations nécessaires pour le calcul ne sont pas disponibles pour l'employé ID: " + idEmploye);
+                System.out.println("TEST Les informations nécessaires pour le calcul ne sont pas disponibles pour l'employé ID: " + idEmploye);
             }
         }
     }
@@ -440,7 +430,7 @@ public void afficherEmployesAvecBonusEtMoyenneSalaireDansPlageDates(String dateD
         }
 
         // Afficher les résultats
-        System.out.println("Employés avec bonus et moyenne de salaire dans la plage de dates :");
+        System.out.println("Employés avec bonus et moyenne de salaire dans la plage de dates _China");
         for (String idEmploye : employesDansPlageDates) {
             double totalBonus = totalBonusParEmploye.getOrDefault(idEmploye, 0.0);
             double sommeSalaire = sommeSalaireParEmploye.getOrDefault(idEmploye, 0.0);
@@ -505,7 +495,7 @@ public void afficherEmployesAvecBonusEtMoyenneSalaireDansPlageDates(String dateD
     }
 
     // Afficher les résultats
-    System.out.println("Montant total des bonus distribués chaque mois de l'année précédente :");
+    System.out.println("Montant total des bonus distribués chaque mois de l'année précédente_CHINA");
     montantTotalParMois.forEach((mois, montantTotal) -> {
         System.out.println("Mois : " + mois);
         System.out.println("Montant total : " + montantTotal);
@@ -513,15 +503,15 @@ public void afficherEmployesAvecBonusEtMoyenneSalaireDansPlageDates(String dateD
     });
 }
 
-
 public static void main(String[] args) {
     String dateDebutPlage = "2024-01-01";
     String dateFinPlage = "2024-12-31";
-        xmlDAO entrepriseDAO = new xmlDAO("ressources/xml/bdChina.xml");
+    xmlDAO entrepriseDAO = new xmlDAO("/projetGlobalHR/src/ressources/xml/bdChina.xml");
+       
         
-      //  calculerDepensesSalairesEntreprise();
         entrepriseDAO.afficherSalaireMoyenParEntreprise();
-    //    entrepriseDAO.calculerDepensesSalairesEntreprise();
+        
+        entrepriseDAO.calculerDepensesSalairesEntreprise();
         entrepriseDAO.calculerNombreTotalJoursCongeParEmploye();
         entrepriseDAO.afficherEmployesCongesSansBonus();
         entrepriseDAO.afficherEmployesCongesAvecTotalBonus();
@@ -530,10 +520,29 @@ public static void main(String[] args) {
         entrepriseDAO.afficherPourcentageSalaireParRapportMoyenneEntreprise();
         entrepriseDAO.afficherEmployesAvecBonusEtMoyenneSalaireDansPlageDates(dateDebutPlage, dateFinPlage);
         entrepriseDAO.calculerMontantTotalBonusParMoisAnneePrecedente();
-       
-
+      
+     
 }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

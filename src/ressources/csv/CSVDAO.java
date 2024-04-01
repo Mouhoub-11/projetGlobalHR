@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CSVDAO {
@@ -111,7 +113,7 @@ public class CSVDAO {
     }
 
     // Liste des employés ayant pris des congés mais n'ayant pas de bonus
-
+/*
     public void listeEmployesAvecCongesSansBonus() {
         Map<Integer, Integer> joursCongeParEmploye = calculerTotalJoursCongeParEmploye();
         Map<Integer, Double> bonusParEmploye = calculerTotalBonusParEmploye();
@@ -119,9 +121,56 @@ public class CSVDAO {
         for (Map.Entry<Integer, Integer> entry : joursCongeParEmploye.entrySet()) {
             int idEmploye = entry.getKey();
             if (!bonusParEmploye.containsKey(idEmploye) || bonusParEmploye.get(idEmploye) == 0.0) {
-                System.out.println("Employé avec ID " + idEmploye + " a pris des congés mais n'a pas de bonus.");
+                System.out.println("Sans Bonus Employé avec ID " + idEmploye + " a pris des congés mais n'a pas de bonus.");
             }
         }
+    }*/
+    
+
+    private static List<String[]> filterEmployeesWithCongesWithoutBonus(String employeesFile, String bonusesFile, String congesFile) throws IOException {
+        List<String[]> employeesWithCongesWithoutBonus = new ArrayList<>();
+
+        List<String[]> employees = readCSV(employeesFile);
+        List<String[]> bonuses = readCSV(bonusesFile);
+        List<String[]> conges = readCSV(congesFile);
+
+        // Parcourir les employés ayant des congés
+        for (String[] conge : conges) {
+            String employeeID = conge[4];
+            boolean hasBonus = false;
+
+            // Vérifier si l'employé a des bonus
+            for (String[] bonus : bonuses) {
+                if (bonus[4].equals(employeeID)) {
+                    hasBonus = true;
+                    break;
+                }
+            }
+
+            // Si l'employé n'a pas de bonus, l'ajouter à la liste
+            if (!hasBonus) {
+                for (String[] employee : employees) {
+                    if (employee[0].equals(employeeID)) {
+                        employeesWithCongesWithoutBonus.add(employee);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return employeesWithCongesWithoutBonus;
+    }
+
+    private static List<String[]> readCSV(String filename) throws IOException {
+        List<String[]> records = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                records.add(values);
+            }
+        }
+        return records;
     }
 
     // Liste des employés ayant pris des congés et le total des bonus qu'ils ont reçus
@@ -200,7 +249,7 @@ public class CSVDAO {
                             int idEmployeBonus = Integer.parseInt(valuesBonus[4]); // L'identifiant de l'employé est à l'index 4 dans le fichier CSV des bonus
                             LocalDate dateBonus = LocalDate.parse(valuesBonus[3], DateTimeFormatter.ofPattern("yyyy-MM-dd")); // Date du bonus est à l'index 3
                             if (idEmploye == idEmployeBonus && (dateBonus.isAfter(dateDebutConge) || dateBonus.isBefore(dateFinConge))) {
-                                System.out.println("Employé avec ID " + idEmploye + " a pris des congés et a reçu un bonus dans la même période.");
+                                System.out.println("Employé avec ID " + idEmploye );
                                 break;
                             }
                         }
@@ -213,6 +262,8 @@ public class CSVDAO {
     }
 
     // Liste des employés avec bonus et salaire moyen dans une plage de dates spécifiée
+    
+ 
 
     public void listeEmployesAvecBonusEtSalaireMoyenDansPlageDates(String dateDebut, String dateFin) {
         LocalDate debutPlage = LocalDate.parse(dateDebut, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -229,8 +280,11 @@ public class CSVDAO {
                 
                 // Ajouter la vérification de la longueur du tableau ici
                 if (values.length > 3) {
+                	
+                
+                   
                     try {
-                        LocalDate dateSalaire = LocalDate.parse(values[3], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        LocalDate dateSalaire = LocalDate.parse(values[1], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                         // Continuer le traitement avec la date correctement parsée
                     } catch (DateTimeParseException e) {
                         // Gérer le cas où la valeur n'est pas une date valide
@@ -245,7 +299,6 @@ public class CSVDAO {
                     continue;
                 }
                 
-                // Continuer avec le reste du traitement des données
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
@@ -291,7 +344,7 @@ public class CSVDAO {
                 double montantSalaire = Double.parseDouble(values[1]); // Le montant du salaire est à l'index 1
                 double salaireMoyenEntreprise = salaireMoyenParEntreprise.getOrDefault(nomEntreprise, 0.0);
                 double pourcentageSalaire = (montantSalaire / salaireMoyenEntreprise) * 100;
-                System.out.println("Employé avec ID " + values[0] + " a un salaire de " + montantSalaire + " qui représente " + pourcentageSalaire + "% de la moyenne de son entreprise.");
+                System.out.println("ALlemagne_ID " + values[0] + " a un salaire de " + montantSalaire + " qui représente " + pourcentageSalaire + "% de la moyenne de son entreprise.");
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
@@ -325,9 +378,19 @@ public class CSVDAO {
             System.out.println("Employé avec ID " + entry.getKey() + " : " + entry.getValue() + " jours");
         }
 
-        // Liste des employés ayant pris des congés mais n'ayant pas de bonus
+  /*      // Liste des employés ayant pris des congés mais n'ayant pas de bonus
         System.out.println("Liste des employés ayant pris des congés mais n'ayant pas de bonus :");
-        csvDAO.listeEmployesAvecCongesSansBonus();
+        csvDAO.listeEmployesAvecCongesSansBonus();*/
+        
+        try {
+            List<String[]> employeesWithCongesWithoutBonus = filterEmployeesWithCongesWithoutBonus("employees.csv", "bonuses.csv", "conges.csv");
+            System.out.println("Employees with Conges but no Bonuses:");
+            for (String[] employee : employeesWithCongesWithoutBonus) {
+                System.out.println("ID: " + employee[0] + ", Nom: " + employee[1] + ", Prenom: " + employee[2]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Liste des employés ayant pris des congés et le total des bonus qu'ils ont reçus
         System.out.println("Liste des employés ayant pris des congés et le total des bonus qu'ils ont reçus :");
@@ -337,8 +400,8 @@ public class CSVDAO {
         Map<Integer, Double> dureeMoyenneCongeParEmploye = csvDAO.calculerDureeMoyenneCongeParEmploye();
         System.out.println("Durée moyenne de congé par employé (en jours) :");
         for (Map.Entry<Integer, Double> entry : dureeMoyenneCongeParEmploye.entrySet()) {
-            System.out.println("Employé avec ID " + entry.getKey() + " : " + entry.getValue() + " jours");
-        }
+            System.out.println("ALLEMAGNE duree moy cong Employé avec ID " + entry.getKey() + " : " + entry.getValue() + " jours");
+        } 
 
         // Liste des employés qui ont pris des congés et des bonus dans la même période
         System.out.println("Liste des employés qui ont pris des congés et des bonus dans la même période :");
@@ -353,7 +416,7 @@ public class CSVDAO {
 
         // Calcul du montant total des bonus distribués chaque mois au cours de l'année précédente
         Map<String, Double> totalBonusParMoisAnneePrecedente = csvDAO.calculerTotalBonusParMoisAnneePrecedente();
-        System.out.println("Montant total des bonus distribués chaque mois de l'année précédente :");
+        System.out.println("Montant total des bonus distribués chaque mois de l'année précédente _Allemagne");
         for (Map.Entry<String, Double> entry : totalBonusParMoisAnneePrecedente.entrySet()) {
             System.out.println(entry.getKey() + " : " + entry.getValue());
         }
@@ -362,4 +425,6 @@ public class CSVDAO {
         System.out.println("Liste des employés avec le pourcentage du salaire par rapport à la moyenne de leur entreprise :");
         csvDAO.listeEmployesAvecPourcentageSalaireParRapportMoyenneEntreprise();
     }
+
+
 }
